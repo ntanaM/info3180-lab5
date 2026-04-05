@@ -7,7 +7,7 @@ from flask_wtf.file import FileRequired, FileAllowed
 
 # Movie Form
 
-class MovieForm:
+class MovieForm(FlaskForm):
   title = StringField('Title', validators=[InputRequired()])
   description = TextAreaField('Description', validators=[InputRequired()])
   poster = FileField('Poster', validators=[FileRequired(), FileAllowed(['jpg', 'png'], "Only JPG and PNG images are allowed")])

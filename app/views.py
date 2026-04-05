@@ -9,8 +9,14 @@ from app import app
 from flask import render_template, request, jsonify, send_file
 import os
 from .models import Movies 
+from .forms import MovieForm
 from . import db
 from werkzeug.utils import secure_filename
+from flask_wtf.csrf import generate_csrf
+from flask_cors import CORS
+
+
+CORS(app, supports_credentials=True)
 
 
 ###
@@ -24,7 +30,7 @@ def index():
 
 @app.route('/api/v1/movies', methods=['POST'])
 def movies():
-    form = Movies()
+    form = MovieForm()
 
     if form.validate_on_submit():
         title = form.title.data
@@ -83,6 +89,10 @@ def send_text_file(file_name):
     file_dot_text = file_name + '.txt'
     return app.send_static_file(file_dot_text)
 
+@app.route('/api/v1/csrf-token', methods=['GET'])
+def get_csrf():
+    return jsonify({'csrf_token': generate_csrf()})
+
 
 @app.after_request
 def add_header(response):
@@ -100,3 +110,8 @@ def add_header(response):
 def page_not_found(error):
     """Custom 404 page."""
     return render_template('404.html'), 404
+
+print("UPLOAD_FOLDER:", app.config.get('UPLOAD_FOLDER'))
+print("SECRET_KEY set:", bool(app.config.get('SECRET_KEY')))
+print("UPLOAD_FOLDER:", app.config.get('UPLOAD_FOLDER'))
+print("UPLOAD_FOLDER full path:", os.path.abspath(app.config.get('UPLOAD_FOLDER')))
