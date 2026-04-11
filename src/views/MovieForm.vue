@@ -134,27 +134,38 @@
   flex-direction: column;
   max-width: 900px;
   gap: 50px;
+  margin: auto;
+  padding: 20px;
 }
 
 .form-container{
-  max-width: 400px;
+  max-width: 500px;
   margin: auto;
+  padding: 30px;
+}
+
+h2{
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 form{
   display: flex;
   flex-direction: column;
-  align-items: left;
-  justify-content: center;
   gap: 20px;
 }
 
 .item{
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 
 }
+
+label{
+  font-size: 18px;
+}
+
 
 button{
   border: none;
@@ -167,7 +178,10 @@ button{
 }
 
 button:hover{
-  background-color: rgb(63, 179, 225);
+ background: linear-gradient(135deg, #3fb3e1, #6cc8ff);
+ transform: translateY(-2px);
+ cursor: pointer;
+
 }
 
 .alert-success{

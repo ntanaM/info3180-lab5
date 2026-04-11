@@ -6,7 +6,7 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request, jsonify, send_file
+from flask import render_template, request, jsonify, send_file, send_from_directory
 import os
 from .models import Movies 
 from .forms import MovieForm
@@ -64,9 +64,37 @@ def movies():
     return jsonify({"errors": form_errors(form)}), 400
 
 
+@app.route('/api/v1/movies', methods=['GET'])
+def get_movies():
+
+    try:
+        movie_lst = Movies.query.all()
+        movies = []
+
+        for movie in movie_lst:
+            m = {
+                "id": movie.id,
+                "title": movie.title,
+                "description": movie.description,
+                "poster": f"/api/v1/posters/{movie.poster}"
+            }
+
+            movies.append(m)
+
+        return jsonify({"movies": movies}), 200
+    
+    except Exception as e:
+        return jsonify({"errors": str(e)}), 400
+
+
 ###
 # The functions below should be applicable to all Flask apps.
 ###
+
+@app.route('/api/v1/posters/<filename>')
+def uploads(filename):
+    #upload_folder = os.path.join(os.getcwd(), 'uploads')
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # Here we define a function to collect form errors from Flask-WTF
 # which we can later use
@@ -106,12 +134,14 @@ def add_header(response):
     return response
 
 
-@app.errorhandler(404)
-def page_not_found(error):
-    """Custom 404 page."""
-    return render_template('404.html'), 404
+#@app.errorhandler(404)
+#def page_not_found(error):
+ #   """Custom 404 page."""
+  #  return render_template('404.html'), 404
 
-print("UPLOAD_FOLDER:", app.config.get('UPLOAD_FOLDER'))
-print("SECRET_KEY set:", bool(app.config.get('SECRET_KEY')))
-print("UPLOAD_FOLDER:", app.config.get('UPLOAD_FOLDER'))
-print("UPLOAD_FOLDER full path:", os.path.abspath(app.config.get('UPLOAD_FOLDER')))
+
+if __name__ == "__main__":
+    print("UPLOAD_FOLDER:", app.config.get('UPLOAD_FOLDER'))
+    print("SECRET_KEY set:", bool(app.config.get('SECRET_KEY')))
+    print("UPLOAD_FOLDER:", app.config.get('UPLOAD_FOLDER'))
+    print("UPLOAD_FOLDER full path:", os.path.abspath(app.config.get('UPLOAD_FOLDER')))
