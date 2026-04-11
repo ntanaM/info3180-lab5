@@ -1,7 +1,7 @@
 <template>
   <div class="about container">
     <h2>About</h2>
-    <p>This is an about page.</p>
+    <p>This lab was completed by: Dana Archer.</p>
   </div>
 </template>
 
